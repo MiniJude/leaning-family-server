@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import CreateUserDto from './dto/create-user.dto';
@@ -14,23 +14,17 @@ export class UsersService {
     private readonly jwtService: JwtService,
   ) {}
 
-  /**
-   * 创建用户
-   *
-   * @author: lcs
-   * @param createUserDto 创建用户的数据传输对象
-   * @returns 注册结果，包含状态码和消息
-   * @throws 如果用户已存在，抛出 HttpException 异常，状态码为 400
-   * @throws 如果注册失败，抛出 HttpException 异常，状态码为 401，并附带错误信息
-   */
   async create(createUserDto: CreateUserDto) {
-    // 判断用户是否存在
-    const res = await this.prismaService.user.findFirst({
+    const user = await this.prismaService.user.findFirst({
       where: {
         email: createUserDto.email,
       },
     });
-    if (res) throw new HttpException('用户已存在', 400);
+
+    if (user) {
+      throw new HttpException('用户已存在', HttpStatus.BAD_REQUEST);
+    }
+
     try {
       await this.prismaService.user.create({
         data: {
@@ -39,46 +33,35 @@ export class UsersService {
           password: this.cryptoService.encrypt(createUserDto.password),
         },
       });
-      return {
-        code: 200,
-        msg: '注册成功',
-      };
     } catch (error) {
-      throw new HttpException('注册失败', 401, { cause: error });
+      throw new HttpException('注册失败', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error,
+      });
     }
   }
 
-  /**
-   * 用户登录
-   *
-   * @author: lcs
-   * @param loginUserDto 登录用户信息
-   * @returns 登录结果，包含状态码和消息
-   * @throws HttpException 当用户不存在、邮箱不存在或密码错误时抛出异常
-   */
   async login(loginUserDto: LoginUserDto) {
     const user = await this.prismaService.user.findFirst({
       where: {
         email: loginUserDto.email,
       },
     });
-    if (!user) throw new HttpException('用户不存在', 401);
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
+    }
+
     if (loginUserDto.email !== user.email) {
-      throw new HttpException('邮箱不存在', 401);
+      throw new HttpException('邮箱不存在', HttpStatus.NOT_FOUND);
     }
     if (!this.cryptoService.verify(loginUserDto.password, user.password)) {
-      throw new HttpException('密码错误', 401);
+      throw new HttpException('密码错误', HttpStatus.UNAUTHORIZED);
     }
-    return {
-      code: 200,
-      msg: '登录成功',
-      data: {
-        token: this.jwtService.sign({
-          email: user.email,
-          id: user.id,
-        }),
-      },
-    };
+
+    const token = this.jwtService.sign({
+      email: user.email,
+      id: user.id,
+    });
+    return token;
   }
 
   async findAll(params: {

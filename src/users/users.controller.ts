@@ -7,25 +7,42 @@ import {
   Param,
   Delete,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
 import CreateUserDto from './dto/create-user.dto';
 import LoginUserDto from './dto/login-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Post('register')
-  register(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto) {
+    await this.usersService.create(createUserDto);
+
+    return {
+      code: HttpStatus.CREATED,
+      msg: '注册成功',
+    };
   }
 
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    return this.usersService.login(loginUserDto);
+    const token = await this.usersService.login(loginUserDto);
+    return {
+      code: HttpStatus.OK,
+      msg: '登录成功',
+      data: {
+        token,
+      },
+    };
   }
 
   @Get()
