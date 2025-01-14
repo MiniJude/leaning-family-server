@@ -5,8 +5,9 @@ import { ConfigModule } from '@nestjs/config';
 // prisma
 import { PrismaModule } from './prisma.module';
 import { PrismaService } from './prisma.service';
-import { PostService } from './post.service';
-import { UsersModule } from './users/users.module';
+import { PostService } from './modules/post/post.service';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -15,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot(),
     PrismaModule,
     UsersModule,
+    AuthModule,
     CryptoModule,
     // 动态全局注册JwtModule模块
     JwtModule.register({

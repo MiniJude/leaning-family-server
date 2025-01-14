@@ -7,7 +7,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { PostService } from './post.service';
+import { PostService } from './modules/post/post.service';
 import { Post as PostModel } from '@prisma/client';
 
 @Controller()
