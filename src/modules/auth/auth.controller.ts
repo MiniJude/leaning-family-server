@@ -6,7 +6,7 @@ import { SignInDto, SignUpDto } from './dto/auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signUp')
+  @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
     await this.authService.signUp(signUpDto);
 
@@ -16,7 +16,7 @@ export class AuthController {
     };
   }
 
-  @Post('signIn')
+  @Post('signin')
   async signIn(@Body() signInDto: SignInDto) {
     const token = await this.authService.signIn(signInDto);
     return {
