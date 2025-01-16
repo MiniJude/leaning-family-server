@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { SignUpDto, SignInDto } from './dto/auth.dto';
 import { CryptoService } from 'src/crypto/crypto.service';
-import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
+import { generateCompleteNickname } from '@/utils/nickname-generator';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,11 @@ export class AuthService {
 
     if (user) {
       throw new HttpException('用户已存在', HttpStatus.BAD_REQUEST);
+    }
+
+    // 判断是否有填写昵称，如果没有则设置随机昵称
+    if (!signUpDto.nickName) {
+      signUpDto.nickName = generateCompleteNickname();
     }
 
     await this.usersService.create(signUpDto);

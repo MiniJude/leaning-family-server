@@ -34,6 +34,7 @@ export class UsersService {
       const user = await this.prismaService.user.create({
         data: {
           email: signUpDto.email,
+          nickName: signUpDto.nickName,
           // 加密
           password: this.cryptoService.encrypt(signUpDto.password),
         },
