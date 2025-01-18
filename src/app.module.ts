@@ -10,6 +10,8 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { JwtModule } from '@nestjs/jwt';
+import { MiddlewareConsumer } from '@nestjs/common';
+import { CspMiddleware } from '@/common/middleware/csp.middleware';
 
 @Module({
   imports: [
@@ -28,4 +30,9 @@ import { JwtModule } from '@nestjs/jwt';
   controllers: [AppController],
   providers: [AppService, PrismaService, PostService],
 })
-export class AppModule {}
+export class AppModule {
+  // 注册中间件
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CspMiddleware).forRoutes('*');
+  }
+}

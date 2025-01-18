@@ -16,6 +16,11 @@ async function bootstrap() {
   // 注册全局过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  // 启用 CORS
+  app.enableCors({
+    origin: '*', // 允许所有源
+  });
+
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
   console.log(`Server is running on http://localhost:${port}`);
