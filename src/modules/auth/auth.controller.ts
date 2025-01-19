@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto/auth.dto';
 
@@ -9,22 +9,11 @@ export class AuthController {
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
     await this.authService.signUp(signUpDto);
-
-    return {
-      code: HttpStatus.CREATED,
-      msg: '注册成功',
-    };
   }
 
   @Post('signin')
   async signIn(@Body() signInDto: SignInDto) {
     const token = await this.authService.signIn(signInDto);
-    return {
-      code: HttpStatus.OK,
-      msg: '登录成功',
-      data: {
-        token,
-      },
-    };
+    return { token };
   }
 }

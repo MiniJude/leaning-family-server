@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { ExceptionInterceptor } from './common/interceptors/exception.interceptor';
+import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '@/common/interceptors/response.interceptor';
+import { ExceptionInterceptor } from '@/common/interceptors/exception.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   // 注册全局拦截器
+  app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalInterceptors(new ExceptionInterceptor());
 
   // 注册全局过滤器

@@ -5,6 +5,8 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { ResponseDto } from '@/common/dto/response.dto';
+import { StatusCode } from '@/common/enums/status-code.enum';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -15,17 +17,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    let message: string | string[] = exception.message;
+    let message = exception.message;
 
     // 如果是 class-validator 抛出的 BadRequestException
     if (exception.response && Array.isArray(exception.response.message)) {
       message = exception.response.message[0]; // 只取第一个错误消息
     }
 
-    // 统一格式化返回
-    response.status(status).json({
-      statusCode: status,
+    const responseBody: ResponseDto<null> = {
+      code: StatusCode.ERROR,
       message,
-    });
+      data: null,
+    };
+
+    // 统一格式化返回
+    response.status(status).json(responseBody);
   }
 }
