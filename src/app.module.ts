@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 // prisma
 import { PrismaModule } from './prisma.module';
 import { PrismaService } from './prisma.service';
-import { PostService } from './modules/post/post.service';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
@@ -28,7 +27,7 @@ import { CspMiddleware } from '@/common/middleware/csp.middleware';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, PostService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {
   // 注册中间件

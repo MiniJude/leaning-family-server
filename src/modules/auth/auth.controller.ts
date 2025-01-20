@@ -13,7 +13,6 @@ export class AuthController {
 
   @Post('signin')
   async signIn(@Body() signInDto: SignInDto) {
-    const token = await this.authService.signIn(signInDto);
-    return { token };
+    return await this.authService.signIn(signInDto);
   }
 }

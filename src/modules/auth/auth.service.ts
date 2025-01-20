@@ -48,10 +48,10 @@ export class AuthService {
       throw new HttpException('密码错误', HttpStatus.UNAUTHORIZED);
     }
 
-    const token = this.jwtService.sign({
+    const accessToken = this.jwtService.sign({
       email: user.email,
       id: user.id,
     });
-    return token;
+    return { accessToken, refreshToken: 'refreshToken', user };
   }
 }
