@@ -48,10 +48,22 @@ export class AuthService {
       throw new HttpException('密码错误', HttpStatus.UNAUTHORIZED);
     }
 
+    // 生成 JWT Token
     const accessToken = this.jwtService.sign({
       email: user.email,
       id: user.id,
     });
-    return { accessToken, refreshToken: 'refreshToken', user };
+
+    // 获取用户的菜单
+    const permissions = await this.usersService.getUserMenus(user.id);
+
+    return {
+      accessToken,
+      refreshToken: 'refreshToken',
+      user: {
+        ...user,
+        permissions,
+      },
+    };
   }
 }

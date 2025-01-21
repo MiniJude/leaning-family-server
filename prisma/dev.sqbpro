@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="dev.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="2"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3087"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="RoleMenu" custom_title="0" dock_id="4" table="4,8:mainRoleMenu"/><table title="Menu" custom_title="0" dock_id="6" table="4,4:mainMenu"/><table title="User" custom_title="0" dock_id="5" table="4,4:mainUser"/><table title="UserRole" custom_title="0" dock_id="3" table="4,8:mainUserRole"/><table title="Menu" custom_title="0" dock_id="2" table="4,4:mainMenu"/><dock_state state="000000ff00000000fd00000001000000020000083c000004fafc0100000002fc000000000000083c0000035f00fffffffc0100000003fc00000000000002850000011d00fffffffc0200000002fb000000160064006f0063006b00420072006f00770073006500350100000000000002000000009700fffffffb000000160064006f0063006b00420072006f00770073006500330100000204000002f60000009700fffffffc00000289000002720000011d00fffffffc0200000002fb000000160064006f0063006b00420072006f00770073006500360100000000000002110000009700fffffffb000000160064006f0063006b00420072006f00770073006500340100000215000002e50000009700fffffffb000000160064006f0063006b00420072006f007700730065003201000004ff0000033d0000011d00fffffffb000000160064006f0063006b00420072006f007700730065003100000004190000042300000000000000000000083c0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Menu" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort><column index="0" mode="0"/></sort><column_widths><column index="1" value="158"/><column index="2" value="167"/><column index="3" value="250"/><column index="4" value="300"/><column index="5" value="259"/><column index="6" value="33"/><column index="7" value="191"/><column index="8" value="40"/><column index="9" value="263"/><column index="10" value="156"/><column index="11" value="65"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Role" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="46"/><column index="3" value="156"/><column index="4" value="65"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="RoleMenu" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="130"/><column index="2" value="49"/><column index="3" value="215"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="User" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="23"/><column index="2" value="156"/><column index="3" value="300"/><column index="4" value="176"/><column index="5" value="109"/><column index="6" value="109"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="UserRole" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="49"/><column index="3" value="159"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="菜单sql*">-- 插入 DASHBOARD_PERMISSION
+INSERT INTO Menu (id, parentId, label, name, icon, type, route, `order`, component) VALUES
+(1, NULL, 'sys.menu.dashboard', 'Dashboard', 'ic-analysis', 0, 'dashboard', 1, NULL),
+(2, 1, 'sys.menu.workbench', 'Workbench', NULL, 1, 'workbench', 1, '/dashboard/workbench/index.tsx'),
+(3, 1, 'sys.menu.analysis', 'Analysis', NULL, 1, 'analysis', 2, '/dashboard/analysis/index.tsx');
+
+-- 插入 MANAGEMENT_PERMISSION
+INSERT INTO Menu (id, parentId, label, name, icon, type, route, `order`, component) VALUES
+(4, NULL, 'sys.menu.management', 'Management', 'ic-management', 0, 'management', 2, NULL),
+(5, 4, 'sys.menu.user.index', 'User Index', NULL, 0, 'user', 1, NULL),
+(6, 5, 'sys.menu.user.profile', 'Profile', NULL, 1, 'profile', 1, '/management/user/profile/index.tsx'),
+(7, 5, 'sys.menu.user.account', 'Account', NULL, 1, 'account', 2, '/management/user/account/index.tsx'),
+(8, 4, 'sys.menu.system.index', 'System', NULL, 0, 'system', 2, NULL),
+(9, 8, 'sys.menu.system.organization', 'Organization', NULL, 1, 'organization', 1, '/management/system/organization/index.tsx'),
+(10, 8, 'sys.menu.system.permission', 'Permission', NULL, 1, 'permission', 2, '/management/system/permission/index.tsx'),
+(11, 8, 'sys.menu.system.role', 'Role', NULL, 1, 'role', 3, '/management/system/role/index.tsx'),
+(12, 8, 'sys.menu.system.user', 'User', NULL, 1, 'user', 4, '/management/system/user/index.tsx'),
+(13, 8, 'sys.menu.system.user_detail', 'User Detail', NULL, 1, 'user/:id', 5, '/management/system/user/detail.tsx');
+
+-- 插入 COMPONENTS_PERMISSION
+INSERT INTO Menu (id, parentId, label, name, icon, type, route, `order`, component) VALUES
+(14, NULL, 'sys.menu.components', 'Components', 'solar:widget-5-bold-duotone', 0, 'components', 3, NULL),
+(15, 14, 'sys.menu.icon', 'Icon', NULL, 1, 'icon', 1, '/components/icon/index.tsx'),
+(16, 14, 'sys.menu.animate', 'Animate', NULL, 1, 'animate', 2, '/components/animate/index.tsx'),
+(17, 14, 'sys.menu.scroll', 'Scroll', NULL, 1, 'scroll', 3, '/components/scroll/index.tsx'),
+(18, 14, 'sys.menu.markdown', 'Markdown', NULL, 1, 'markdown', 4, '/components/markdown/index.tsx'),
+(19, 14, 'sys.menu.editor', 'Editor', NULL, 1, 'editor', 5, '/components/editor/index.tsx'),
+(20, 14, 'sys.menu.i18n', 'Multi Language', NULL, 1, 'i18n', 6, '/components/multi-language/index.tsx'),
+(21, 14, 'sys.menu.upload', 'Upload', NULL, 1, 'Upload', 7, '/components/upload/index.tsx'),
+(22, 14, 'sys.menu.chart', 'Chart', NULL, 1, 'chart', 8, '/components/chart/index.tsx'),
+(23, 14, 'sys.menu.toast', 'Toast', NULL, 1, 'toast', 9, '/components/toast/index.tsx');
+
+-- 插入 FUNCTIONS_PERMISSION
+INSERT INTO Menu (id, parentId, label, name, icon, type, route, `order`, component) VALUES
+(24, NULL, 'sys.menu.functions', 'functions', 'solar:plain-2-bold-duotone', 0, 'functions', 4, NULL),
+(25, 24, 'sys.menu.clipboard', 'Clipboard', NULL, 1, 'clipboard', 1, '/functions/clipboard/index.tsx'),
+(26, 24, 'sys.menu.token_expired', 'Token Expired', NULL, 1, 'token-expired', 2, '/functions/token-expired/index.tsx');
+
+-- 插入 MENU_LEVEL_PERMISSION
+INSERT INTO Menu (id, parentId, label, name, icon, type, route, `order`, component) VALUES
+(27, NULL, 'sys.menu.menulevel.index', 'Menu Level', 'ic-menulevel', 0, 'menu-level', 5, NULL),
+(28, 27, 'sys.menu.menulevel.1a', 'Menu Level 1a', NULL, 1, 'menu-level-1a', 1, '/menu-level/menu-level-1a/index.tsx'),
+(29, 27, 'sys.menu.menulevel.1b.index', 'Menu Level 1b', NULL, 0, 'menu-level-1b', 2, NULL),
+(30, 29, 'sys.menu.menulevel.1b.2a', 'Menu Level 2a', NULL, 1, 'menu-level-2a', 1, '/menu-level/menu-level-1b/menu-level-2a/index.tsx'),
+(31, 29, 'sys.menu.menulevel.1b.2b.index', 'Menu Level 2b', NULL, 0, 'menu-level-2b', 2, NULL),
+(32, 31, 'sys.menu.menulevel.1b.2b.3a', 'Menu Level 3a', NULL, 1, 'menu-level-3a', 1, '/menu-level/menu-level-1b/menu-level-2b/menu-level-3a/index.tsx'),
+(33, 31, 'sys.menu.menulevel.1b.2b.3b', 'Menu Level 3b', NULL, 1, 'menu-level-3b', 2, '/menu-level/menu-level-1b/menu-level-2b/menu-level-3b/index.tsx');
+
+-- 插入 ERRORS_PERMISSION
+INSERT INTO Menu (id, parentId, label, name, icon, type, route, `order`, component) VALUES
+(34, NULL, 'sys.menu.error.index', 'Error', 'bxs:error-alt', 0, 'error', 6, NULL),
+(35, 34, 'sys.menu.error.403', '403', NULL, 1, '403', 1, '/sys/error/Page403.tsx'),
+(36, 34, 'sys.menu.error.404', '404', NULL, 1, '404', 2, '/sys/error/Page404.tsx'),
+(37, 34, 'sys.menu.error.500', '500', NULL, 1, '500', 3, '/sys/error/Page500.tsx');
+</sql><sql name="菜单和角色绑定sql*">-- 绑定 roleId 为 1 的角色与菜单
+INSERT INTO RoleMenu (roleId, menuId) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26),
+(1, 27),
+(1, 28),
+(1, 29),
+(1, 30),
+(1, 31),
+(1, 32),
+(1, 33),
+(1, 34),
+(1, 35),
+(1, 36),
+(1, 37);
+</sql><sql name="SQL 3*">SELECT * FROM RoleMenu WHERE roleId = 1;</sql><current_tab id="1"/></tab_sql></sqlb_project>

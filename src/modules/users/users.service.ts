@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma, Menu } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CryptoService } from 'src/crypto/crypto.service';
 import { SignUpDto } from '../auth/dto/auth.dto';
@@ -94,5 +94,52 @@ export class UsersService {
     return this.prismaService.user.delete({
       where,
     });
+  }
+
+  /**
+   * 获取用户的菜单
+   * @param userId
+   * @returns Menu[]
+   */
+  async getUserMenus(userId: number): Promise<Menu[]> {
+    // 获取用户的角色
+    const userRoles = await this.prismaService.userRole.findMany({
+      where: { userId },
+      include: {
+        role: {
+          include: { roleMenus: { include: { menu: true } } },
+        },
+      },
+    });
+
+    // 提取菜单并构建树结构
+    const menus = userRoles.flatMap((userRole) =>
+      userRole.role.roleMenus.map((roleMenu) => roleMenu.menu),
+    );
+
+    // 构建树形结构
+    const menuTree = this.buildMenuTree(menus);
+
+    return menuTree;
+  }
+
+  // 新增构建菜单树的辅助方法
+  private buildMenuTree(menus: Menu[]): Menu[] {
+    const map: { [key: number]: Menu & { children?: Menu[] } } = {};
+    const roots: Menu[] = [];
+
+    menus.forEach((menu) => {
+      map[menu.id] = { ...menu, children: [] };
+    });
+
+    menus.forEach((menu) => {
+      if (menu.parentId) {
+        map[menu.parentId]?.children?.push(map[menu.id]);
+      } else {
+        roots.push(map[menu.id]);
+      }
+    });
+
+    return roots;
   }
 }
