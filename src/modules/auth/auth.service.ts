@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignUpDto, SignInDto } from './dto/auth.dto';
 import { CryptoService } from 'src/crypto/crypto.service';
 import { UsersService } from '../users/users.service';
+import { PermissionService } from '../permisson/permission.service';
 import { generateCompleteNickname } from '@/utils/nickname-generator';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly cryptoService: CryptoService,
     private readonly jwtService: JwtService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   /**
@@ -55,7 +57,7 @@ export class AuthService {
     });
 
     // 获取用户的菜单
-    const permissions = await this.usersService.getUserMenus(user.id);
+    const permissions = await this.permissionService.getPermissionList(user.id);
 
     return {
       accessToken,

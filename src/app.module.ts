@@ -7,8 +7,8 @@ import { PrismaModule } from './prisma.module';
 import { PrismaService } from './prisma.service';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { PermissionModule } from './modules/permisson/permission.module';
 import { CryptoModule } from './crypto/crypto.module';
-import { JwtModule } from '@nestjs/jwt';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { CspMiddleware } from '@/common/middleware/csp.middleware';
 
@@ -18,13 +18,8 @@ import { CspMiddleware } from '@/common/middleware/csp.middleware';
     PrismaModule,
     UsersModule,
     AuthModule,
+    PermissionModule,
     CryptoModule,
-    // 动态全局注册JwtModule模块
-    JwtModule.register({
-      global: true,
-      secret: process.env['JWT_SECRET'],
-      signOptions: { expiresIn: '24h' },
-    }),
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
