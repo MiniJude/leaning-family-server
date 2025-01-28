@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma.service';
 import { Menu } from '@prisma/client';
+import { CreatePermissionDto, UpdatePermissionDto } from './dto/permission.dto';
 @Injectable()
 export class PermissionService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -50,5 +51,69 @@ export class PermissionService {
     });
 
     return roots;
+  }
+
+  /**
+   * 创建菜单
+   * @param permission
+   * @returns Menu
+   */
+  async createPermission(permission: CreatePermissionDto) {
+    try {
+      // 创建一个事务
+      await this.prismaService.$transaction(async (tx) => {
+        // 创建菜单
+        const menu = await tx.menu.create({
+          data: permission,
+        });
+
+        // 创建角色菜单
+        await tx.roleMenu.create({
+          data: {
+            roleId: 1,
+            menuId: menu.id,
+          },
+        });
+
+        return menu;
+      });
+    } catch (error) {
+      throw new Error('Failed to create permission:' + error);
+    }
+  }
+
+  /**
+   * 更新菜单
+   * @param permission
+   * @returns Menu
+   */
+  updatePermission(permission: UpdatePermissionDto) {
+    return this.prismaService.menu.update({
+      where: { id: permission.id },
+      data: permission,
+    });
+  }
+
+  /**
+   * 删除菜单
+   * @param id
+   * @returns Menu
+   */
+  async deletePermission(id: number) {
+    try {
+      await this.prismaService.$transaction(async (tx) => {
+        // 删除角色菜单
+        await tx.roleMenu.deleteMany({
+          where: { menuId: id },
+        });
+
+        // 删除菜单
+        await tx.menu.delete({
+          where: { id },
+        });
+      });
+    } catch (error) {
+      throw new Error('Failed to delete permission: ' + error);
+    }
   }
 }
