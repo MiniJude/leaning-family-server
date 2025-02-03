@@ -13,7 +13,7 @@ export class CreatePermissionDto {
   type: number;
   @IsOptional()
   route?: string;
-  @IsNotEmpty()
+  @IsOptional()
   order: number;
   @IsOptional()
   @ValidateIf((o) => o.type === 1)

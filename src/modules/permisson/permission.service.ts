@@ -62,7 +62,7 @@ export class PermissionService {
     try {
       // 创建一个事务
       await this.prismaService.$transaction(async (tx) => {
-        // 创建菜单
+        permission.order ??= 1; // 设置order默认值
         const menu = await tx.menu.create({
           data: permission,
         });
@@ -88,9 +88,16 @@ export class PermissionService {
    * @returns Menu
    */
   updatePermission(permission: UpdatePermissionDto) {
+    permission.order ??= 1; // 设置order默认值
+    const { id, parentId, ...rest } = permission;
+
+    const parent = parentId
+      ? { connect: { id: parentId } }
+      : { disconnect: true };
+
     return this.prismaService.menu.update({
-      where: { id: permission.id },
-      data: permission,
+      where: { id },
+      data: { ...rest, parent },
     });
   }
 
