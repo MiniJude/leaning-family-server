@@ -11,6 +11,7 @@ import { PermissionModule } from './modules/permisson/permission.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { CspMiddleware } from '@/common/middleware/csp.middleware';
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CspMiddleware } from '@/common/middleware/csp.middleware';
     AuthModule,
     PermissionModule,
     CryptoModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
