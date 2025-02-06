@@ -57,9 +57,17 @@ export class RoleService {
     });
   }
 
-  async getAllRoles(): Promise<Role[]> {
-    return this.prismaService.role.findMany({
+  async getAllRoles() {
+    const roles = await this.prismaService.role.findMany({
       include: { roleMenus: true }, // 包含角色与菜单的关联
+    });
+
+    return roles.map((role) => {
+      const { roleMenus, ...rest } = role;
+      return {
+        ...rest,
+        menuIds: roleMenus.map((roleMenu) => roleMenu.menuId),
+      };
     });
   }
 
