@@ -30,21 +30,42 @@ export class UsersService {
    * @returns User
    */
   async create(signUpDto: SignUpDto) {
-    try {
-      const user = await this.prismaService.user.create({
-        data: {
-          email: signUpDto.email,
-          nickName: signUpDto.nickName,
-          // 加密
-          password: this.cryptoService.encrypt(signUpDto.password),
-        },
-      });
-      return user;
-    } catch (error) {
-      throw new HttpException('注册失败', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error,
-      });
-    }
+    return this.prismaService.$transaction(async (prisma) => {
+      try {
+        // 默认角色ID为6（普通用户）
+        const defaultRoleId = 6;
+        const defaultPassword = '123456';
+
+        // 如果没有提供密码，则使用默认密码
+        const password = signUpDto.password
+          ? this.cryptoService.encrypt(signUpDto.password)
+          : this.cryptoService.encrypt(defaultPassword);
+
+        // 创建用户
+        const user = await prisma.user.create({
+          data: {
+            email: signUpDto.email,
+            nickName: signUpDto.nickName,
+            password: password,
+          },
+        });
+
+        // 分配角色
+        const roleId = signUpDto.roleId || defaultRoleId;
+        await prisma.userRole.create({
+          data: {
+            userId: user.id,
+            roleId: roleId,
+          },
+        });
+
+        return user;
+      } catch (error) {
+        throw new HttpException('注册失败', HttpStatus.INTERNAL_SERVER_ERROR, {
+          cause: error,
+        });
+      }
+    });
   }
 
   /**
@@ -91,8 +112,18 @@ export class UsersService {
    * @returns User
    */
   async remove(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prismaService.user.delete({
-      where,
+    return this.prismaService.$transaction(async (prisma) => {
+      // 删除用户角色关联表中的记录
+      await prisma.userRole.deleteMany({
+        where: {
+          userId: where.id,
+        },
+      });
+
+      // 删除用户
+      return prisma.user.delete({
+        where,
+      });
     });
   }
 }

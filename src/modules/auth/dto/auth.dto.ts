@@ -8,6 +8,8 @@ export class SignUpDto {
   email: string;
   @IsNotEmpty({ message: '密码不能为空' })
   password: string;
+  @IsOptional()
+  roleId?: number;
 }
 
 export class SignInDto {
