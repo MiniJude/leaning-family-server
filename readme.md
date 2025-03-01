@@ -8,51 +8,27 @@
 
 - **后端框架**：NestJS
 - **数据库**：Prisma + MySQL
-- **API**：GraphQL
+- **API**：REST API
 - **认证方式**：JWT（JSON Web Token）
 - **代码风格**：TypeScript
 - **依赖管理**：pnpm
-- **其他工具**：Prisma Migrate，GraphQL Playground，Redis（缓存）
+- **其他工具**：Prisma Migrate，Redis（缓存）
 
 ## 功能点
 
-### 1. 用户认证与管理
-- [ ] 用户注册
-- [ ] 用户登录（JWT 认证）
+
+- [✅] 用户注册
+- [✅] 用户登录（JWT 认证）
 - [ ] 用户信息修改
 - [ ] 用户密码修改
-- [ ] Google登录
-- [ ] Github登录
-- [ ] WeChat扫码登录
-- [ ] 手机号登录
 
-### 2. 分类管理
-- [ ] 新增分类
-- [ ] 分类查询
-- [ ] 删除分类
-- [ ] 编辑分类
+- [✅] 权限管理
+- [✅] 角色管理
+- [✅] 用户管理
 
-### 3. 博客管理
-- [ ] 发布文章（支持 Markdown 格式）
-- [ ] 编辑文章
-- [ ] 删除文章
-- [ ] 查看文章
-
-### 4. 评论管理
-- [ ] 新增评论
-- [ ] 删除评论
-- [ ] 点赞评论
-- [ ] 踩评论
-
-### 5. 站点设置
-- [ ] 站点标题和简介设置
-- [ ] 主题样式配置（如暗黑模式、色彩搭配等）
-- [ ] 多语言设置
-
-### 9. 日志与监控
-- [ ] 查看站点访问统计
-- [ ] 系统日志记录
-- [ ] API 请求监控
+- [ ] 博客管理
+- [ ] 评论管理
+- [ ] 日志与监控
 
 ## 接口文档
 https://app.apifox.com/project/5751130
@@ -76,7 +52,7 @@ pnpm install
 
 在 .env 文件中配置数据库连接信息，如：
 ```bash
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname?schema=public
+DATABASE_URL=mysql://user:password@localhost:5432/dbname?schema=public
 ```
 
 4. 启动应用：
@@ -84,9 +60,6 @@ DATABASE_URL=postgresql://user:password@localhost:5432/dbname?schema=public
 ```bash
 pnpm start:dev
 ```
-
-5. 访问 GraphQL Playground：
-   - 默认地址：http://localhost:3000/graphql
 
 ## 贡献
 欢迎贡献代码！如有任何问题或建议，请提 Issue 或 Pull Request。
