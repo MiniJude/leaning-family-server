@@ -1,6 +1,15 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Post,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
+import { UserDto } from './dto/user.dto';
 
 @Controller('user')
 export class UsersController {
@@ -9,6 +18,11 @@ export class UsersController {
   @Get('list')
   findAll() {
     return this.usersService.findAll({});
+  }
+
+  @Post('create')
+  async create(@Body() userDto: UserDto) {
+    await this.usersService.create(userDto);
   }
 
   @Get('info/:id')
